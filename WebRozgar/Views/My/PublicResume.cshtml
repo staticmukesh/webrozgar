@@ -1,0 +1,39 @@
+﻿@model WebRozgar.ViewModels.PublicProfileViewModel
+@{
+    ViewBag.Title = "Profile";
+}
+<div class="row-fluid" style="margin-top: 10px;">
+    <div class="span2">
+        <img src="~/img/employer.jpg" style="height: 145px; width: 145px;" />
+    </div>
+    <div class="span9" style="margin-top: 20px; margin-left: -5px">
+        <a style="text-decoration:none" href="@Url.Action("Profile", "My", new { Id = Model.Username })">
+            <p style="color: #36a0d6; font-size: 40px; font-family: 'Segoe UI';">@Model.FirstName @Model.LastName</p>
+            <p>&#64 @Model.Username</p>
+        </a>
+        <div class="row-fluid" style="margin-top: 38px;">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li>@Html.ActionLink("About me", "Profile")</li>
+                    <li class="active">@Html.ActionLink("Resume", "Resume", "My")</li>
+                    <li>@Html.ActionLink("Applications", "ApplicationStatus", "My")</li>
+                    <li>@Html.ActionLink("Available jobs", "AvailableJobs", "Jobs")</li>
+                    <li>@Html.ActionLink("Settings", "Manage", "Account")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid" style="margin-top: 30px;">
+    <div class="span11">
+        <div class="tabbable">
+            <div class="tab-content" style="min-height: 250px;">
+                <div class="tab-pane active">
+                    @Html.ActionLink("Download your resume", "Resume", "Account")<br />
+                    <br />
+                    <button class="btn">@Html.ActionLink("Update", "Manage", "Account")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

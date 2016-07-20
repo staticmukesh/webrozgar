@@ -1,0 +1,179 @@
+﻿@model WebRozgar.ViewModels.DetailViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+<div class="row-fluid" style="margin-top: 10px;">
+    <div class="span2">
+        <img src="~/img/employer.jpg" style="height: 145px; width: 145px;" />
+    </div>
+    <div class="span9" style="margin-top: 20px; margin-left: -5px">
+        <a style="text-decoration:none" href="@Url.Action("Profile", "My", new { Id = User.Identity.Name })">
+            <p style="color: #36a0d6; font-size: 40px; font-family: 'Segoe UI';">@ViewBag.FirstName @ViewBag.LastName</p>
+            <p>&#64 @User.Identity.Name</p>
+        </a>
+        <div class="row-fluid" style="margin-top: 38px;">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    @if (User.IsInRole("recruiter"))
+                    {
+                        <li>@Html.ActionLink("About Company", "Profile", "My")</li>
+                        <li>@Html.ActionLink("Float Job", "FloatJob", "Jobs")</li>
+                        <li>@Html.ActionLink("Previous jobs", "FloatHistory", "My")</li>
+                        <li class="active">@Html.ActionLink("Job Detail", "Edit", new { Id = Model.jobmodel.JobId })</li>
+                        <li>@Html.ActionLink("Settings", "Manage", "Account")</li>
+                    }
+                    else if (User.IsInRole("seeker"))
+                    {
+                        <li>@Html.ActionLink("About Me", "Profile", "My")</li>
+                        <li>@Html.ActionLink("Resume", "Resume", "My")</li>
+                        <li>@Html.ActionLink("Applications", "ApplicationStatus", "My")</li>
+                        <li>@Html.ActionLink("Available jobs", "AvailableJobs", "Jobs")</li>
+                        <li class="active">@Html.ActionLink("Job Detail", "Edit", new { Id = Model.jobmodel.JobId })</li>
+                        <li>@Html.ActionLink("Settings", "Manage", "Account")</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid" style="margin-top: 20px;">
+    <div class="span11">
+        <div class="tabbable">
+            <div class="tab-content">
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>Job Title: </strong>
+                    </div>
+                    <div class="span3">
+                        @Model.jobmodel.JobTitle
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>Location: </strong>
+                    </div>
+                    <div class="span3">
+                        @Model.jobmodel.Location
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>No of openings: </strong>
+                    </div>
+                    <div class="span3">
+                        @Model.jobmodel.NoOfOpenings
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>Experience Required</strong>
+                    </div>
+                    <div class="span3">
+                        @Model.jobmodel.Experience
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>Description</strong>
+                    </div>
+                    <div class="span5">
+                        @Model.jobmodel.Description
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>Posted Date</strong>
+                    </div>
+                    <div class="span3">
+                        @Model.jobmodel.PostedDate
+                    </div>
+                </div>
+            </div>
+            @if (User.IsInRole("seeker")&&(Model.jobmodel.Status=="-1"))
+            {
+                using (Ajax.BeginForm("Apply", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "ApplySuccess('#" + @Model.jobmodel.JobId + "')" }, new { @style = "margin-bottom:0px;" }))
+                {
+                <input type="hidden" name="jobid" value="@Model.jobmodel.JobId" />
+                <input type="submit" id="@Model.jobmodel.JobId" value="Apply" class="btn btn-primary" />
+                }
+            }
+            else if (User.IsInRole("seeker") && (Model.jobmodel.Status == "1"))
+            {
+                <button class="btn btn-success">Applied</button>
+            }
+        </div>
+        <hr />
+        @if (Model.jobmodel.FloatUsername == User.Identity.Name)
+        {
+            <legend style="font-size: 20px">Application Status</legend>
+            if (Model.applicationmodel.Count() == 0)
+            {
+            <p>No user has applied to this job. Do you want to edit it ? @Html.ActionLink("Click here", "Edit", new { Id = Model.jobmodel.JobId })</p>
+            }
+            else
+            {
+            <div class="row-fluid">
+                <div class="span7">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Applied Users</th>
+                            <th>Status</th>
+                            <th>Set Status</th>
+                            <th></th>
+                        </tr>
+                        @foreach (var item in Model.applicationmodel)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.ActionLink(item.UserName, "Profile", "Home", new { id = item.UserName }, new { @class = "anchor" })
+                                </td>
+                                <td id="updatestatus">
+                                    @if (item.status == "-1")
+                                    {   
+                                        <p>Not shortlisted</p>
+                                    }
+                                    else if (item.status == "-2")
+                                    {   
+                                        <p>Not Selected</p>
+                                    }
+                                    else if (item.status == "1")
+                                    {   
+                                        <p>Selected</p>
+                                    }
+                                    else if (item.status == "2")
+                                    {   
+                                        <p>Applied</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Shortlisted</p>
+                                    }
+                                </td>
+                                <td>
+                                    @using (Ajax.BeginForm("SetStatus", null, new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "Post", UpdateTargetId = "updatestatus" }, new { @style = "margin-bottom:0px;" }))
+                                    {
+                                        List<SelectListItem> items = new List<SelectListItem>();
+                                        items.Add(new SelectListItem { Text = "Shortlist", Value = "0" });
+                                        items.Add(new SelectListItem { Text = "Selected", Value = "1" });
+                                        items.Add(new SelectListItem { Text = "Not Shortlist", Value = "-1" });
+                                        items.Add(new SelectListItem { Text = "Not Selected", Value = "-2" });
+                                        @Html.DropDownList("status", items, "Select", new { @class = "control-label", @style = "width:120px;" })
+                                        <input type="hidden" value="@item.JobId" name="jobid" />
+                                        <input type="hidden" value="@item.UserName" name="userid" />
+                                        <input type="submit" class="btn btn-success" value="Select" style="margin-top: -10px; margin-left: 20px" />
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+            }
+        }
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

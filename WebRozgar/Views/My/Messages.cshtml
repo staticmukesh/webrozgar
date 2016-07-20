@@ -1,0 +1,120 @@
+﻿@model IEnumerable<WebRozgar.Models.Message>
+
+@{
+    ViewBag.Title = "My Messages";
+}
+
+<div class="row-fluid" style="margin-top: 10px;">
+    <div class="span2">
+        @if (User.IsInRole("seeker"))
+        {
+            <img src="~/img/employee.png" style="height: 145px; width: 145px;" />
+        }
+        else
+        {
+            <img src="~/img/employer.jpg" style="height: 145px; width: 145px;" />
+        }
+    </div>
+    <div class="span9" style="margin-top: 20px; margin-left: -5px">
+        <a style="text-decoration:none" href="@Url.Action("Profile", "My", new { Id = User.Identity.Name })">
+            <p style="color: #36a0d6; font-size: 40px; font-family: 'Segoe UI';">@ViewBag.FirstName @ViewBag.LastName</p>
+            <p>&#64 @User.Identity.Name</p>
+        </a>
+        <div class="row-fluid" style="margin-top: 38px;">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    @if (User.IsInRole("recruiter"))
+                    {
+                        <li>@Html.ActionLink("About Company", "Profile", "My")</li>
+                        <li>@Html.ActionLink("Float Job", "FloatJob", "Jobs")</li>
+                        <li>@Html.ActionLink("Previous jobs", "FloatHistory", "My")</li>
+                        <li class="active">@Html.ActionLink("My Messages", "Messages", "My")</li>
+                        <li>@Html.ActionLink("Settings", "Manage", "Account")</li>
+                    }
+                    else if (User.IsInRole("seeker"))
+                    {
+                        <li>@Html.ActionLink("About Me", "Profile", "My")</li>
+                        <li>@Html.ActionLink("Resume", "Resume", "My")</li>
+                        <li>@Html.ActionLink("Applications", "ApplicationStatus", "My")</li>
+                        <li>@Html.ActionLink("Available jobs", "AvailableJobs", "Jobs")</li>
+                        <li class="active">@Html.ActionLink("My Messages", "Messages", "My")</li>
+                        <li>@Html.ActionLink("Settings", "Manage", "Account")</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid" style="margin-top: 50px;">
+    <div class="span11">
+        <div class="tabbable">
+            @if (Model.Count() == 0)
+            {
+                <p style="font-size: 15px;">No Messages</p>
+            }
+            @foreach (var item in Model)
+            {
+                if (item.seen == 1)
+                {
+                <div class="span8 alert alert-success" style="margin-bottom: 10px; margin-left: 0px">
+                    <div class="row-fluid">
+                        <legend>
+                            <a href="@Url.Action("Message", new { id = item.Id })" style="text-decoration:none">
+                                <p style="color: #36a0d6; font-size: 25px; font-family: 'Segoe UI'; margin-bottom: 12px;">
+                                    @item.Subject
+                            </a>
+                        </legend>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <p style="font-size: 15px;">
+                                @Html.Raw(item.Body)
+                            </p>
+                        </div>
+                        <div class="span12" style="margin-left: 0px;">
+                            <div class="span8">
+                                <p style="font-size: 12px;">from: @Html.ActionLink(item.SenderUsername, "Profile", "Home", new { Id = item.SenderUsername }, new { @style = "text-decoration:none" }) at @item.SentTime</p>
+                            </div>
+                            <div class="span4">
+                                @Html.ActionLink("Reply", "Reply", "My", new { id = item.SenderUsername, subject = item.Subject }, new { @class = "btn btn-primary pull-right" })
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+                }
+                else
+                {
+                <div class="span8 well" style="margin-bottom: 10px; margin-left: 0px">
+                    <div class="row-fluid">
+                        <legend>
+                            <a href="@Url.Action("Message", new { id = item.Id })" style="text-decoration:none">
+                                <p style="color: #36a0d6; font-size: 25px; font-family: 'Segoe UI'; margin-bottom: 12px;">
+                                    @item.Subject
+                            </a>
+                        </legend>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <p style="font-size: 15px;">
+                                @Html.Raw(item.Body)
+                            </p>
+                        </div>
+                        <div class="span12" style="margin-left: 0px;">
+                            <div class="span8">
+                                <p style="font-size: 12px;">from: @Html.ActionLink(item.SenderUsername, "Profile", "Home", new { Id = item.SenderUsername }, new { @style = "text-decoration:none" }) at @item.SentTime</p>
+                            </div>
+                            <div class="span4">
+                                @{
+                    string newsubject = "Re: " + item.Subject;
+                                    @Html.ActionLink("Reply", "SendMessage", "My", new { username = item.SenderUsername, subject = newsubject }, new { @class = "btn btn-primary pull-right" })
+                           
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                }
+            }
+        </div>
+    </div>
+</div>

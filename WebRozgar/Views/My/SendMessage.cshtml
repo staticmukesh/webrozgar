@@ -1,0 +1,87 @@
+﻿@model WebRozgar.ViewModels.MessageViewModel
+
+@{
+    ViewBag.Title = "SendMessage";
+}
+
+
+<div class="row-fluid" style="margin-top: 10px;">
+    <div class="span2">
+        <img src="~/img/employer.jpg" style="height: 145px; width: 145px;" />
+    </div>
+    <div class="span9" style="margin-top: 20px; margin-left: -5px">
+        <a style="text-decoration:none" href="@Url.Action("Profile", "My", new { Id = User.Identity.Name })">
+            <p style="color: #36a0d6; font-size: 40px; font-family: 'Segoe UI';">@ViewBag.FirstName @ViewBag.LastName</p>
+            <p>&#64 @User.Identity.Name</p>
+        </a>
+        <div class="row-fluid" style="margin-top: 38px;">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    @if (User.IsInRole("recruiter"))
+                    {
+                        <li>@Html.ActionLink("About Company", "Profile", "My")</li>
+                        <li>@Html.ActionLink("Float Job", "FloatJob", "Jobs")</li>
+                        <li>@Html.ActionLink("Previous jobs", "FloatHistory", "My")</li>
+                        <li class="active">@Html.ActionLink("Send Message", "SendMessage", "My")</li>
+                        <li>@Html.ActionLink("Settings", "Manage", "Account")</li>
+                    }
+                    else if (User.IsInRole("seeker"))
+                    {
+                        <li>@Html.ActionLink("About Me", "Profile", "My")</li>
+                        <li>@Html.ActionLink("Resume", "Resume", "My")</li>
+                        <li>@Html.ActionLink("Applications", "ApplicationStatus", "My")</li>
+                        <li>@Html.ActionLink("Available jobs", "AvailableJobs", "Jobs")</li>
+                        <li class="active">@Html.ActionLink("Send Message", "SendMessage", "My")</li>
+                        <li>@Html.ActionLink("Settings", "Manage", "Account")</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid" style="margin-top: 20px;">
+    <div class="span11">
+        <div class="tabbable">
+            @using (Ajax.BeginForm("SendMessage", new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "Update", InsertionMode = InsertionMode.Replace, LoadingElementId = "aloadingindicator" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <fieldset class="form-horizontal">
+                    <div class="control-group">
+                        @Html.LabelFor(m => m.UserName, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.EditorFor(m => m.UserName)
+                            @Html.ValidationMessageFor(m => m.UserName, null, new { @class = "help-inline" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        @Html.LabelFor(m => m.Subject, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.EditorFor(m => m.Subject)
+                            @Html.ValidationMessageFor(m => m.Subject, null, new { @class = "help-inline" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        @Html.LabelFor(m => m.Body, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.TextAreaFor(m => m.Body)
+                            @Html.ValidationMessageFor(m => m.Body, null, new { @class = "help-inline" })
+                        </div>
+                    </div>
+                    <div class="form-actions no-color" style="padding-bottom: 0px;">
+                        <input type="submit" value="Send" class="btn btn-primary" />
+                        <img src="~/img/ajax-loader.gif" style="margin-left: 10px;" id="aloadingindicator" />
+                        <div id="Update" style="margin-top: 10px;">
+                        </div>
+                    </div>
+
+                </fieldset>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

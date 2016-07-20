@@ -1,0 +1,97 @@
+﻿@model WebRozgar.ViewModels.FloatJobViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="row-fluid" style="margin-top: 10px;">
+    <div class="span2">
+        <img src="~/img/employer.jpg" style="height: 145px; width: 145px;" />
+    </div>
+    <div class="span9" style="margin-top: 20px; margin-left: -5px">
+        <a style="text-decoration:none" href="@Url.Action("Profile", "My", new { Id = User.Identity.Name })">
+            <p style="color: #36a0d6; font-size: 40px; font-family: 'Segoe UI';">@ViewBag.FirstName @ViewBag.LastName</p>
+            <p>&#64 @User.Identity.Name</p>
+        </a>
+        <div class="row-fluid" style="margin-top: 38px;">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li>@Html.ActionLink("About Company", "Profile", "My")</li>
+                    <li>@Html.ActionLink("Float Job", "FloatJob", "My")</li>
+                    <li>@Html.ActionLink("Previous jobs", "FloatHistory", "My")</li>
+                    <li class="active">@Html.ActionLink("Edit Job", "Edit", new { Id = Model.JobId })</li>
+                    <li>@Html.ActionLink("Settings", "Manage", "Account")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid" style="margin-top: 30px;">
+    <div class="span11">
+        <div class="tabbable">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <fieldset class="form-horizontal">
+                    @Html.HiddenFor(model => model.JobId)
+
+                    <div class="control-group">
+                        @Html.LabelFor(m => m.JobTitle, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.JobTitle)
+                            @Html.ValidationMessageFor(m => m.JobTitle, null, new { @class = "help-inline" })
+                        </div>
+
+                    </div>
+                    <div class="control-group">
+                        @Html.LabelFor(m => m.Location, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.Location)
+                            @Html.ValidationMessageFor(m => m.Location, null, new { @class = "help-inline" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        @Html.LabelFor(m => m.NoOfOpenings, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.NoOfOpenings)
+                            @Html.ValidationMessageFor(m => m.NoOfOpenings, null, new { @class = "help-inline" })
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        @Html.LabelFor(m => m.Experience, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.Experience)
+                            @Html.ValidationMessageFor(m => m.Experience, null, new { @class = "help-inline" })
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        @Html.LabelFor(m => m.SkillsRequired, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.TextBoxFor(m => m.SkillsRequired)
+                            @Html.ValidationMessageFor(m => m.SkillsRequired, null, new { @class = "help-inline" })
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        @Html.LabelFor(m => m.Description, new { @class = "control-label" })
+                        <div class="controls">
+                            @Html.TextAreaFor(m => m.Description, new { @style = "height:100px;width:30%;" })
+                            @Html.ValidationMessageFor(m => m.Description, null, new { @class = "help-inline" })
+                        </div>
+                    </div>
+                    <div class="form-actions no-color" style="padding-bottom: 0px;">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </fieldset>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,96 @@
+﻿@model WebRozgar.ViewModels.PublicProfileViewModel
+
+@{
+     ViewBag.Title ="Profile" ;  
+}
+<div class="row-fluid" style="margin-top: 10px;">
+    <div class="span2">
+        @if (Model.Role == "seeker")
+        {
+             <img src="~/img/employee.png" style="height: 145px; width: 145px;" />
+        }
+        else
+        {
+             <img src="~/img/employer.jpg" style="height: 145px; width: 145px;" />
+        }
+       
+    </div>
+    <div class="span9" style="margin-top: 20px; margin-left: -5px">
+        <p style="color: #36a0d6; font-size: 40px; font-family: 'Segoe UI';">@Model.FirstName @Model.LastName</p>
+        <a style="text-decoration:none" href="@Url.Action("Profile", "Home", new { Id = Model.Username })">
+        <p>&#64 @Model.Username </p>
+        </a>
+        <div class="row-fluid" style="margin-top: 38px;">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active">@Html.ActionLink("About me", "Profile")</li>
+                    @if (Model.Role == "seeker" && (Roles.IsUserInRole(User.Identity.Name, "recruiter")))
+                    {   <li>@Html.ActionLink("Resume", "Resume", "Account", new { id = Model.Username }, new {@class="anchor" })</li>
+                    }
+                    <li><a href="@Url.Action("SendMessage", "My",new {username = Model.Username })">Message Me <i class="icon-envelope"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid" style="margin-top: 30px;">
+    <div class="span11">
+        <div class="tabbable">
+            <div class="tab-content" style="min-height: 250px;">
+                <div class="tab-pane active">
+                    @if (Model.Role == "seeker")
+                    {
+                        <p>Hello Everyone!!!!</p>
+                        <p>I am @Model.FirstName @Model.LastName .I have done @Model.Education from @Model.University .</p>
+                        if (Model.WorkExperience == "Fresher")
+                        {
+<p>I am fresher and hoping for better future.</p>
+                        }
+                        else
+                        {
+<p>I have glorious experince of @Model.WorkExperience .</p>
+                        }
+                        <p><strong>More about me :</strong></p>
+                        <p>@Model.Bio</p>
+                    }
+                    else
+                    {
+                        <div class="row-fluid">
+                            <div class="span2">
+                                <strong>Company Name: </strong>
+                            </div>
+                            <div class="span3">
+                                @Model.ComapnyName
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span2">
+                                <strong>Company Website: </strong>
+                            </div>
+                            <div class="span3">
+                                @Model.Website
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span2">
+                                <strong>Company Type: </strong>
+                            </div>
+                            <div class="span3">
+                                @Model.Type
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span2">
+                                <strong>About Company: </strong>
+                            </div>
+                            <div class="span3">
+                                @Model.AboutCompany
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

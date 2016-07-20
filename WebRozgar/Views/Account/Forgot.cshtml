@@ -1,0 +1,39 @@
+﻿
+@model WebRozgar.ViewModels.StringViewModel
+@{
+    ViewBag.Title = "Forgot";
+}
+
+<h2>Forgot Password/Username ?</h2>
+<p>Don't worry, we will help you :)</p>
+@using (Ajax.BeginForm("forgot", new AjaxOptions { HttpMethod = "POST", InsertionMode=InsertionMode.Replace, LoadingElementId = "loader", OnFailure="ShowRedStatus", OnSuccess="ShowGreenStatus",UpdateTargetId = "updatestatus" }))
+{
+    <div class="row-fluid">
+        <div class="span3">
+            @Html.TextBoxFor(m => m.Data, new { @placeholder = "Email/Username", @style="width:267px;" })
+        </div>
+        <div class="span7">
+            <input type="submit" class="btn btn-success help-inline" value="Enter" />
+        </div>
+        <div class="span12" style="margin-left:0px;">
+            @Html.ValidationMessageFor(m => m.Data, "Email/Username is required")
+        </div>
+    </div>
+}
+
+<img src="~/img/ajax-loader.gif" class="loadingindicator" id="loader" />
+<p id="updatestatus">
+</p>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script type="text/javascript">
+        function ShowGreenStatus() {
+            $('#updatestatus').removeClass('well').addClass('alert alert-success');
+        };
+        function ShowRedStatus() {
+            $('#updatestatus').removeClass('well').addClass('alert alert-error');
+            $('#updatestatus').text("An error has occured while processing your request");
+        };
+</script>

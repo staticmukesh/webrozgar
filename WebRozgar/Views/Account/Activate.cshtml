@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Activate";
+}
+
+<h2>Activate</h2>
+@if (ViewBag.status == 0)
+{
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p>Account is already confirmed</p>
+    </div>  
+}
+else if (ViewBag.status == -1)
+{
+    <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p>Account doesn't. Don't play with the URL .</p>
+    </div> 
+}
+else if(ViewBag.status==1)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p>Thanks for activating the account</p>
+    </div> 
+}
+<p class="well">@Html.ActionLink("Login", "Login", "Account", null,new {@style="text-decoration:none" }) for Getting Started.</p>
+

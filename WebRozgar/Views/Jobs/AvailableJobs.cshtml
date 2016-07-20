@@ -1,0 +1,113 @@
+﻿@model IEnumerable<WebRozgar.ViewModels.FloatJobViewModel>
+@helper Truncate(string input, int length)
+{
+    if (input.Length <= length)
+    {
+    @input
+    }
+    else
+    {
+    @input.Substring(0, length)<text>...</text>
+    }
+}
+
+@{
+    ViewBag.Title = "Available Jobs";
+}
+<div class="row-fluid" style="margin-top: 10px;">
+    <div class="span2">
+        <img src="~/img/employee.png" style="height: 145px; width: 145px;" />
+    </div>
+    <div class="span9" style="margin-top: 20px; margin-left: -5px">
+        <a style="text-decoration:none" href="@Url.Action("Profile", "My", new {Id=User.Identity.Name })">
+        <p style="color: #36a0d6; font-size: 40px; font-family: 'Segoe UI';">@ViewBag.FirstName @ViewBag.LastName</p>
+        <p>&#64 @User.Identity.Name</p>
+        </a>
+        <div class="row-fluid" style="margin-top: 38px;">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li>@Html.ActionLink("About me", "Profile", "My")</li>
+                    <li>@Html.ActionLink("Resume", "Resume", "My")</li>
+                    <li>@Html.ActionLink("Applications", "ApplicationStatus", "My")</li>
+                    <li class="active">@Html.ActionLink("Available jobs", "AvailableJobs", "Jobs")</li>
+                    <li>@Html.ActionLink("Settings", "Manage", "Account")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid" style="margin-top: 30px;">
+    <div class="span11">
+        <div class="tabbable">
+            <div class="tab-content" style="min-height: 250px;">
+                <div class="tab-pane active" id="tab1">
+                    @if (Model.Count() == 0)
+                    {
+                        <p style="font-size:25px;">No jobs are available</p>
+                    }
+                    else
+                    {
+                        <table class="table table-hover">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PostedDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.JobTitle)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Location)
+                                </th>
+                                <th>
+                                    <strong>Floated By</strong>
+                                </th>
+
+                                <th></th>
+                            </tr>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PostedDate)
+                                </td>
+                                <td>
+                                     @Html.ActionLink(item.JobTitle, "Details", "Jobs", new { Id = item.JobId }, new {@class="anchor" })
+                                </td>
+                                <td>
+                                    @Truncate(item.Description, 20)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Location)
+                                </td>
+                                <td>
+                                    @Html.ActionLink(item.FloatUsername, "Profile", "Home", new { Id = item.FloatUsername }, new {@class="anchor" })
+                                </td>
+                                <td>
+                                    @if (User.IsInRole("seeker")&&(item.Status=="-1"))
+                                    {
+                                        using (Ajax.BeginForm("Apply", null, new AjaxOptions { HttpMethod = "Post", OnSuccess = "ApplySuccess('#" + @item.JobId + "')" }, new { @style = "margin-bottom:0px;" }))
+                                        {
+                                        <input type="hidden" name="jobid" value="@item.JobId" />
+                                        <input type="submit" id="@item.JobId" value="Apply" class="btn btn-primary" />
+                                        }
+                                    }
+                                    else if (item.Status == "1")
+                                    {
+                                        <button class="btn btn-success">Applied</button>
+                                    } 
+                                </td>
+                            </tr>
+                            }
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

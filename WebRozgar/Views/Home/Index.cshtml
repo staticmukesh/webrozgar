@@ -1,0 +1,30 @@
+﻿@model List<WebRozgar.ViewModels.FloatJobViewModel>
+@{
+    ViewBag.Title = "Home Page";  
+}
+
+@using (Ajax.BeginForm("Index", new AjaxOptions { HttpMethod = "Get", InsertionMode = InsertionMode.Replace, UpdateTargetId = "result" , LoadingElementId="aloadingindicator"}))
+{
+    <div class="row-fluid">
+        <div class="span3"></div>
+        <div class="span6">
+            <img src="~/img/WebRozgar.png" />
+        </div>
+        <div class="span3"></div>
+    </div>
+    <div class="row-fluid">
+        <div class="span3"></div>
+        <div class="span6">
+            <input type="text" style="width: 95%; height: 100%;" name="query"/>
+            <input type="submit" value="Search Job" class="btn btn-success" />
+            <img src="~/img/ajax-loader.gif" id="aloadingindicator"  style="margin-left:10px;"/>
+        </div>
+        <div class="span3"></div>
+    </div>
+}
+ @Html.Partial("_SearchResult", Model)
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "EmailVerification";
+}
+
+@if (ViewBag.Message == "success")
+{
+    <p style="color: #36a0d6; font-size: 20px;margin-top:40px;margin-bottom:40px;">You are one step away from completing your registration. </p>
+    <div class="alert alert-success" >
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p>Just click on the activation link we've sent to your email <strong>@ViewBag.Email</strong>.</p>
+    </div>
+}
+else if (ViewBag.Message == "fail")
+{
+    <div class="alert alert-fail">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p>:( An activation email can't be sent.</p>
+    </div>
+}
+else if (ViewBag.Message == "notactivate")
+{
+    <div class="alert alert-fail">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p>Your account is not activated.Please activate it to use these features.</p>
+    </div>   
+    <br />
+    
+    
+}
+<div class="row-fluid">
+    <p>Haven't received an email from us?</p>
+    <ul style="list-style-type:decimal">
+        <li>Please check <strong>'SPAM'</strong> folder in your email, or</li><br />
+        <li>Re send activation email<br />
+            @using (Ajax.BeginForm("SendActivationEmail", new AjaxOptions() { UpdateTargetId = "updatestatus", HttpMethod = "Post", OnBegin = "AjaxStart", OnComplete = "AjaxStop" }))
+            {
+                <div class="span3">
+                    <input type="text" name="email" placeholder="Email" style="border-radius: 0px; height: 17px; width: 264px;" />
+                </div>
+                <div class="span9">
+                    <input type="submit" id="buttonsubmit" class="btn btn-success" style="height: 27px; border: 0px;" />
+                </div>
+                <div class="span12" style="margin-left: 5px; font-size: 14px; color: green;" id="updatestatus">
+                    <img src="~/img/ajax-loader.gif" class="loadingindicator" />
+                </div>
+            }</li>
+    </ul>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

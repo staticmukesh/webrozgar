@@ -1,0 +1,139 @@
+﻿@model WebRozgar.ViewModels.RecruiterProfileViewModel
+@{
+    ViewBag.Title = "Account Settings";
+}
+
+<hgroup class="title">
+    <p style="font-size: 30px; color: #36a0d6; margin-top: 30px;">@ViewBag.Title</p>
+</hgroup>
+
+<div class="row-fluid" style="margin-top: 40px;">
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active">@Html.ActionLink("Update Profile", "Manage", "Account")</li>
+            <li>@Html.ActionLink("Change Password", "ChangePassword", "Account")</li>
+            <li>@Html.ActionLink("Back To Profile", "Profile", "My")</li>
+        </ul>
+        <div class="tab-content" style="min-height: 250px;">
+            <div class="tab-pane active" id="tab1">
+
+                @if (ViewBag.Message != null)
+                {
+                    if (ViewBag.Message == "1")
+                    {
+                    <div class="alert alert-success">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <p>Profile updated successfully!!!!!! <strong>@Html.ActionLink("Check", "Profile", "My")</strong> ur profile</p>
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <p>Error while updating profile</p>
+                    </div>
+                    }
+                }
+
+                @using (Html.BeginForm("ManageProfile", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <fieldset class="form-horizontal">
+                        <legend>Personal Info</legend>
+
+                        <div class="control-group">
+                            @Html.LabelFor(m => m.FirstName, new { @class = "control-label" })
+                            <div class="controls">
+                                @Html.EditorFor(m => m.FirstName)
+                                @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            @Html.LabelFor(m => m.LastName, new { @class = "control-label" })
+                            <div class="controls">
+                                @Html.EditorFor(m => m.LastName)
+                                @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            @Html.LabelFor(m => m.Phone, new { @class = "control-label" })
+                            <div class="controls">
+                                @Html.EditorFor(m => m.Phone)
+                                @Html.ValidationMessageFor(m => m.Phone, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            @Html.LabelFor(m => m.Gender, new { @class = "control-label" })
+                            <div class="controls">
+                                @{
+                    List<SelectListItem> item = new List<SelectListItem>();
+                    item.Add(new SelectListItem { Text = "Male", Value = "Male" });
+                    item.Add(new SelectListItem { Text = "Female", Value = "Female" });
+                                }
+                                @Html.DropDownListFor(m => m.Gender, item, "Select", new { @class = "control-label", @id = "genders" })
+                                @Html.ValidationMessageFor(m => m.Gender, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+
+                        <legend>Company Info</legend>
+
+                        <div class="control-group">
+                            @Html.LabelFor(m => m.ComapnyName, new { @class = "control-label" })
+                            <div class="controls">
+                                @Html.EditorFor(m => m.ComapnyName)
+                                @Html.ValidationMessageFor(m => m.ComapnyName, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            @Html.LabelFor(m => m.Website, new { @class = "control-label" })
+                            <div class="controls">
+                                @Html.EditorFor(m => m.Website)
+                                @Html.ValidationMessageFor(m => m.Website, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+
+
+                        <div class="control-group">
+                            @Html.LabelFor(m => m.Type, new { @class = "control-label" })
+                            <div class="controls">
+                                @{
+                    List<SelectListItem> typeitem = new List<SelectListItem>();
+                    typeitem.Add(new SelectListItem { Text = "Startup", Value = "1" });
+                    typeitem.Add(new SelectListItem { Text = "Government", Value = "2" });
+                    typeitem.Add(new SelectListItem { Text = "Public", Value = "3" });
+                    typeitem.Add(new SelectListItem { Text = "Private", Value = "4" });
+                                }
+                                @Html.DropDownListFor(m => m.Type, typeitem, "Select", new { @class = "control-label", @id = "genders" })
+                                @Html.ValidationMessageFor(m => m.Type, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            @Html.LabelFor(m => m.AboutCompany, new { @class = "control-label" })
+                            <div class="controls">
+                                @Html.TextAreaFor(m => m.AboutCompany, new { @style = "height:100px;width:40%;", @placeholder = "Brief overview of company" })
+                                @Html.ValidationMessageFor(m => m.AboutCompany, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+
+
+
+                        <div class="control-group">
+                            <div class="controls">
+                                <input type="submit" value="Update" class="btn btn-primary" />
+                            </div>
+                        </div>
+
+                        @Html.ValidationSummary(true)
+                    </fieldset> 
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

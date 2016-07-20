@@ -1,0 +1,65 @@
+﻿@model WebRozgar.ViewModels.RecruiterProfileViewModel
+@{
+    ViewBag.Title = "Profile";
+}
+<div class="row-fluid" style="margin-top: 10px;">
+    <div class="span2">
+        <img src="~/img/employer.jpg" style="height: 145px; width: 145px;" />
+    </div>
+    <div class="span9" style="margin-top: 20px; margin-left: -5px">
+        <a style="text-decoration:none" href="@Url.Action("Profile", "My", new { Id = User.Identity.Name })">
+            <p style="color: #36a0d6; font-size: 40px; font-family: 'Segoe UI';">@Model.FirstName @Model.LastName</p>
+            <p>&#64 @User.Identity.Name</p>
+        </a>
+        <div class="row-fluid" style="margin-top: 38px;">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active">@Html.ActionLink("About Company", "Profile", "My")</li>
+                    <li>@Html.ActionLink("Float Job", "FloatJob", "Jobs")</li>
+                    <li>@Html.ActionLink("Previous jobs", "FloatHistory")</li>
+                    <li>@Html.ActionLink("Settings", "Manage", "Account")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span11">
+        <div class="tabbable">
+            <div class="tab-content" style="min-height: 250px;">
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>Company Name: </strong>
+                    </div>
+                    <div class="span3">
+                        @Model.ComapnyName
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>Company Website: </strong>
+                    </div>
+                    <div class="span3">
+                        @Model.Website
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>Company Type: </strong>
+                    </div>
+                    <div class="span3">
+                        @Model.Type
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <strong>About Company: </strong>
+                    </div>
+                    <div class="span5">
+                        @Model.AboutCompany
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

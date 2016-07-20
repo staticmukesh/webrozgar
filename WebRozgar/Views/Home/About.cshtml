@@ -1,0 +1,53 @@
+﻿@model WebRozgar.ViewModels.ContactViewModel
+@{
+    ViewBag.Title = "About Us";
+}
+<hgroup>
+    <h2 class="page-header">@ViewBag.Title</h2>
+</hgroup>
+<div class="row-fluid">
+    <ul class="thumbnails">
+        <li class="span2" style="margin-right: 50px;">
+            <div class="thumbnail" style="text-align: center">
+                <img style="width: 100%" data-src="holder.js/260x180" alt="" src="https://graph.facebook.com/sharma.mukesh.439/picture?width=200&height=350">
+                <h5><a href="https://facebook.com/sharma.mukesh.439/" target="_blank" style="text-decoration: none">Mukesh Sharma</a></h5>
+            </div>
+        </li>
+        <li class="span2" style="margin-right: 50px;">
+
+        </li>
+        <li class="span2" style="margin-right: 50px;">
+
+        </li>
+
+        <li class="span4 pull-right">
+            @using (Ajax.BeginForm("Contact", new AjaxOptions { HttpMethod = "Post",InsertionMode=InsertionMode.Replace, UpdateTargetId = "Update", LoadingElementId = "aloadingindicator" }))
+            {
+                <fieldset class="form-horizontal">
+                    <legend>Contact Us</legend>
+                    <div class="control-group">
+                        @Html.TextBoxFor(m => m.Name, new { @placeholder = "Name" })
+
+                    </div>
+                    <div class="control-group">
+                        @Html.TextBoxFor(m => m.Email, new { @placeholder = "Email" })
+                    </div>
+                    <div class="control-group">
+                        @Html.TextAreaFor(m => m.Message, new { @placeholder = "Message" })
+                    </div>
+                    <div class="control-group">
+                        <input type="submit" value="Contact Me" class="btn btn-primary" />
+                        <img src="~/img/ajax-loader.gif" style="margin-left: 10px;" id="aloadingindicator" />
+                    </div>
+                    <div id="Update">
+
+                    </div>
+                </fieldset>
+            }
+        </li>
+    </ul>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title -WebRozgar</title>
+    <link href="~/Icon.ico" rel="shortcut icon" type="image/x-icon" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("iCare4Delhi", "Index", "Home", null, new { @class = "brand" })
+                <div class="nav-collapse collapse">
+                    <ul class="nav pull-right">
+                        @*<li style="margin-right: 10px;">
+                            @using (Ajax.BeginForm("SearchProfile", "Home", new AjaxOptions { UpdateTargetId="searchresult", HttpMethod="Get" }))
+                            {
+                                <input type="search" placeholder="Search" id="search" value="searchquery" />
+                                <div id="searchresult" class="row-fluid" style="position: absolute; margin-top: -16px; z-index: 1000; width: 409px; height: 100px; background-color: coral;">
+                                </div>
+                            }
+                        </li>*@
+                        <li>@Html.ActionLink("About Us", "About", "Home")</li>
+                        @if (Request.IsAuthenticated)
+                        {
+                            @Html.AntiForgeryToken()
+            
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello! @User.Identity.Name
+                                    <b class="caret"></b>
+                                    @if (ViewBag.MessageCount != 0)
+                                    {
+                                        <span class="badge badge-important">@ViewBag.MessageCount</span>
+                                    }
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Account", "Manage", "Account")</li>
+                                    <li>@Html.ActionLink("Profile", "Profile", "My")</li>
+                                    <li><a href="@Url.Action("Messages", "My")">Messages @if (ViewBag.MessageCount != 0)
+                                                                                        {
+                                        <i class="badge badge-important">@ViewBag.MessageCount</i>
+                                                                                        }</a></li>
+                                    <li class="divider"></li>
+                                    <li>@Html.ActionLink("Log Out", "LogOff", "Account")</li>
+                                </ul>
+                            </li>
+                            <li></li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+              <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Complaints", "About", "Home")</li>
+                    <li>@Html.ActionLink("About Us", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact Us", "Contact", "Home")</li>
+
+                    @if (Request.IsAuthenticated)
+                    {
+                        @Html.AntiForgeryToken()
+            
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello! @User.Identity.Name
+                                <b class="caret"></b>
+                                @if (ViewBag.MessageCount != 0)
+                                {
+                                    <span class="badge badge-important">@ViewBag.MessageCount</span>
+                                }
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Account", "Manage", "Account")</li>
+                                <li>@Html.ActionLink("Profile", "Profile", "My")</li>
+                                <li><a href="@Url.Action("Messages", "My")">Messages @if (ViewBag.MessageCount != 0)
+                                                                                     {
+                                    <i class="badge badge-important">@ViewBag.MessageCount</i>
+                                                                                     }</a></li>
+                                <li class="divider"></li>
+                                <li>@Html.ActionLink("Log Out", "LogOff", "Account")</li>
+                            </ul>
+                        </li>
+                        <li></li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Register /", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                        <li style="margin-left: -20px">@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                    }
+                </ul>
+
+        </div>
+    </div>
+    <div class="container" id="main" style="min-height: 700px;">
+        @RenderBody()
+        <hr />
+        <footer style="text-align: center;">
+            <p>&copy; @DateTime.Now.Year - Indian Institute of Technology Delhi</p>
+            <p>Designed & developed by <a href="http://iammukesh.info" target="_blank">Team Alpha</a></p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

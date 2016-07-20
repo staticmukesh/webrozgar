@@ -1,0 +1,79 @@
+﻿@model WebRozgar.ViewModels.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+</hgroup>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <fieldset class="form-horizontal">
+        <legend>Create a new account.</legend>
+        <div class="control-group">
+            @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(m => m.Email)
+                @Html.ValidationMessageFor(m => m.Email, null, new { @class = "help-inline" })
+            </div>
+
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(m => m.UserName, new { @class = "control-label" })
+            <div class="controls">
+                @Html.TextBoxFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName, null, new { @class = "help-inline" })
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+            <div class="controls">
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password, null, new { @class = "help-inline" })
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+            <div class="controls">
+                @Html.PasswordFor(m => m.ConfirmPassword)
+                @Html.ValidationMessageFor(m => m.ConfirmPassword, null, new { @class = "help-inline" })
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                @{
+                    List<SelectListItem> items = new List<SelectListItem>();
+                    items.Add(new SelectListItem { Text = "Job Seeker", Value = "seeker" });
+
+                    items.Add(new SelectListItem { Text = "Recruiter", Value = "recruiter" });
+                }
+                @Html.DropDownListFor(m => m.TypeOfUser, items, new { @class = "control-label" })
+                @Html.ValidationMessageFor(m => m.TypeOfUser, null, new { @class = "help-inline" })
+            </div>
+        </div>
+
+        <div class="form-actions no-color" style="padding-bottom:0px;">
+            <input type="submit" value="Register" class="btn btn-primary" />
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                 <span class="field-validation-error">
+                    @if (ViewData["Error"]!=null)
+                     {
+                        @ViewData["Error"].ToString();
+                     }
+                 </span>
+            </div>
+        </div>
+    </fieldset>
+   
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
